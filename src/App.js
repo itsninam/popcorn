@@ -4,9 +4,10 @@ import Main from "./Components/Main/Main";
 import Results from "./Components/Header/Results";
 import SearchMovies from "./Components/Header/SearchMovies";
 import Logo from "./Components/Header/Logo";
-import MoviesBox from "./Components/Main/MoviesBox/MoviesBox";
-import WatchedBox from "./Components/Main/WatchedBox/WatchedBox";
 import MovieList from "./Components/Main/MoviesBox/MovieList";
+import Box from "./Components/Main/Box";
+import MoviesWatchedList from "./Components/Main/WatchedBox/MoviesWatchedList";
+import MoviesWatchedSummary from "./Components/Main/WatchedBox/MoviesWatchedSummary";
 
 const tempMovieData = [
   {
@@ -32,8 +33,32 @@ const tempMovieData = [
   },
 ];
 
+const tempWatchedData = [
+  {
+    imdbID: "tt1375666",
+    Title: "Inception",
+    Year: "2010",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg",
+    runtime: 148,
+    imdbRating: 8.8,
+    userRating: 10,
+  },
+  {
+    imdbID: "tt0088763",
+    Title: "Back to the Future",
+    Year: "1985",
+    Poster:
+      "https://m.media-amazon.com/images/M/MV5BZmU0M2Y1OGUtZjIxNi00ZjBkLTg1MjgtOWIyNThiZWIwYjRiXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg",
+    runtime: 116,
+    imdbRating: 8.5,
+    userRating: 9,
+  },
+];
+
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
@@ -44,10 +69,13 @@ export default function App() {
       </Header>
 
       <Main>
-        <MoviesBox>
+        <Box>
           <MovieList movies={movies} />
-        </MoviesBox>
-        <WatchedBox />
+        </Box>
+        <Box>
+          <MoviesWatchedSummary watched={watched} />
+          <MoviesWatchedList watched={watched} />
+        </Box>
       </Main>
     </>
   );
