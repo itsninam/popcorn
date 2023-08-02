@@ -9,6 +9,7 @@ import Box from "./Components/Main/Box";
 import MoviesWatchedList from "./Components/Main/WatchedBox/MoviesWatchedList";
 import MoviesWatchedSummary from "./Components/Main/WatchedBox/MoviesWatchedSummary";
 import Loading from "./Components/Main/Loading";
+import ErrorMessage from "./Components/Main/ErrorMessage";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -60,16 +61,28 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(function () {
     async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&s='interstellar'`
-      );
-      const data = await res.json();
-      setMovies(data.Search);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&s='interstellarxx'`
+        );
+
+        if (!res.ok)
+          throw new Error("Something went wrong with fetching movies");
+
+        const data = await res.json();
+        if (data.Response === "False") throw new Error("Movie not found");
+        setMovies(data.Search);
+      } catch (err) {
+        console.error(err.message);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     fetchMovies();
@@ -84,7 +97,12 @@ export default function App() {
       </Header>
 
       <Main>
-        <Box>{isLoading ? <Loading /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          {/* {isLoading ? <Loading /> : <MovieList movies={movies} />} */}
+          {isLoading && <Loading />}
+          {!isLoading && !error && <MovieList movies={movies} />}
+          {error && <ErrorMessage error={error} />}
+        </Box>
         <Box>
           <MoviesWatchedSummary watched={watched} />
           <MoviesWatchedList watched={watched} />
