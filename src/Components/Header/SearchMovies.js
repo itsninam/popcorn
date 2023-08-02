@@ -1,8 +1,6 @@
 import { useState } from "react";
 
-const SearchMovies = () => {
-  const [query, setQuery] = useState("");
-
+const SearchMovies = ({ query, setQuery }) => {
   return (
     <input
       className="search"
