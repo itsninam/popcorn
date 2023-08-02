@@ -8,7 +8,7 @@ import MovieList from "./Components/Main/MoviesBox/MovieList";
 import Box from "./Components/Main/Box";
 import MoviesWatchedList from "./Components/Main/WatchedBox/MoviesWatchedList";
 import MoviesWatchedSummary from "./Components/Main/WatchedBox/MoviesWatchedSummary";
-
+import Loading from "./Components/Main/Loading";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -55,18 +55,26 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
-const KEY = "f84fc31d";
+const KEY = "8b32e28";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+  useEffect(function () {
+    async function fetchMovies() {
+      setIsLoading(true);
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&s='interstellar'`
+      );
+      const data = await res.json();
+      setMovies(data.Search);
+      setIsLoading(false);
+    }
+
+    fetchMovies();
   }, []);
 
-  useEffect(() => {});
   return (
     <>
       <Header>
@@ -76,9 +84,7 @@ export default function App() {
       </Header>
 
       <Main>
-        <Box>
-          <MovieList movies={movies} />
-        </Box>
+        <Box>{isLoading ? <Loading /> : <MovieList movies={movies} />}</Box>
         <Box>
           <MoviesWatchedSummary watched={watched} />
           <MoviesWatchedList watched={watched} />
