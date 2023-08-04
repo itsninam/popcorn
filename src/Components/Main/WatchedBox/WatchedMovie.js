@@ -1,4 +1,7 @@
 const WatchedMovie = ({ movie }) => {
+  {
+    console.log(movie, "movie");
+  }
   return (
     <li>
       <img src={movie.Poster} alt={`${movie.Title} poster`} />
@@ -14,7 +17,7 @@ const WatchedMovie = ({ movie }) => {
         </p>
         <p>
           <span>⏳</span>
-          <span>{movie.runtime} min</span>
+          <span>{movie.Runtime}</span>
         </p>
       </div>
     </li>
