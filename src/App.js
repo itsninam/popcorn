@@ -121,7 +121,6 @@ export default function App() {
 
       <Main>
         <Box>
-          {/* {isLoading ? <Loading /> : <MovieList movies={movies} />} */}
           {isLoading && <Loading />}
           {!isLoading && !error && (
             <MovieList movies={movies} handleSelectMovie={handleSelectMovie} />
